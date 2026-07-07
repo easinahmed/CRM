@@ -11,6 +11,7 @@ const CustomersPage = lazy(() => import('./features/crm/CustomersPage'));
 const LeadsPage = lazy(() => import('./features/crm/LeadsPage'));
 const DealsPage = lazy(() => import('./features/crm/DealsPage'));
 const ProductsPage = lazy(() => import('./features/inventory/ProductsPage'));
+const CategoriesPage = lazy(() => import('./features/inventory/CategoriesPage'));
 const OrdersPage = lazy(() => import('./features/sales/OrdersPage'));
 const InvoicesPage = lazy(() => import('./features/sales/InvoicesPage'));
 const EmployeesPage = lazy(() => import('./features/employees/EmployeesPage'));
@@ -54,6 +55,7 @@ export default function App() {
           <Route path="/crm/leads" element={<LeadsPage />} />
           <Route path="/crm/deals" element={<DealsPage />} />
           <Route path="/inventory/products" element={<ProductsPage />} />
+          <Route path="/inventory/categories" element={<CategoriesPage />} />
           <Route path="/sales/orders" element={<OrdersPage />} />
           <Route path="/sales/invoices" element={<InvoicesPage />} />
           <Route path="/employees" element={<EmployeesPage />} />

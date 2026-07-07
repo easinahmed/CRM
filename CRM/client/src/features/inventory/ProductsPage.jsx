@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Search, Package } from 'lucide-react';
 import { createColumnHelper } from '@tanstack/react-table';
 import { getProducts, createProduct, updateProduct, deleteProduct } from '../../api/products';
+import { getCategories } from '../../api/categories';
 import {
   Button, Input, Card, Modal, Table, Pagination, PageHeader, Badge, statusBadge,
 } from '../../components/ui';
@@ -27,6 +28,12 @@ export default function ProductsPage() {
   });
   const products = data?.data?.data || [];
 
+  const { data: categoriesData } = useQuery({
+    queryKey: ['categories'],
+    queryFn: () => getCategories(),
+  });
+  const categories = categoriesData?.data?.data || [];
+
   const createMut = useMutation({
     mutationFn: createProduct,
     onSuccess: () => { qc.invalidateQueries({ queryKey: ['products'] }); setModal(false); },
@@ -39,7 +46,11 @@ export default function ProductsPage() {
   const { register, handleSubmit, reset, formState: { errors } } = useForm({ resolver: zodResolver(productSchema) });
   const openCreate = () => { reset({}); setEditing(null); setModal(true); };
   const openEdit = (p) => { reset(p); setEditing(p); setModal(true); };
-  const onSubmit = (d) => editing ? updateMut.mutate({ id: editing._id, data: d }) : createMut.mutate(d);
+  const onSubmit = (d) => {
+    // Remove empty category before sending
+    if (d.category === '') delete d.category;
+    editing ? updateMut.mutate({ id: editing._id, data: d }) : createMut.mutate(d);
+  };
 
   const columns = [
     col.accessor('name', { header: 'Product', cell: ({ row }) => (
@@ -89,7 +100,18 @@ export default function ProductsPage() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <Input label="Stock" type="number" {...register('stock')} />
-            <Input label="Category ID" {...register('category')} />
+            <div>
+              <label className="text-sm font-medium text-text mb-1 block">Category (Optional)</label>
+              <select 
+                {...register('category')} 
+                className="w-full h-9 px-3 rounded-lg border border-border bg-surface-secondary text-sm text-text focus:outline-none focus:ring-2 focus:ring-primary-500/30"
+              >
+                <option value="">-- Select Category --</option>
+                {categories.map(cat => (
+                  <option key={cat._id} value={cat._id}>{cat.name}</option>
+                ))}
+              </select>
+            </div>
           </div>
           <Input label="Description" {...register('description')} />
           <div className="flex justify-end gap-3">

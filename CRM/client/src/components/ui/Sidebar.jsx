@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard, Users, Target, DollarSign, Package, ShoppingCart,
   FileText, UserCircle, Receipt, BarChart3, ClipboardList, Settings, LogOut,
-  ChevronLeft, ChevronRight,
+  ChevronLeft, ChevronRight, Tag,
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { useAuth } from '../../context/AuthContext';
@@ -22,6 +22,7 @@ const navItems = [
     { to: '/sales/invoices', label: 'Invoices', icon: FileText },
   ]},
   { section: 'Products', items: [
+    { to: '/inventory/categories', label: 'Categories', icon: Tag },
     { to: '/inventory/products', label: 'Products', icon: Package },
   ]},
   { section: 'Employees', items: [
