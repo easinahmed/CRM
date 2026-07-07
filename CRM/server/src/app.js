@@ -35,7 +35,7 @@ if (env.NODE_ENV === 'development') {
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 300,
+  max: env.NODE_ENV === 'development' ? 1000 : 300, // More lenient in development
   standardHeaders: true,
   legacyHeaders: false,
   message: { success: false, message: 'Too many authentication requests, please try again later' },
@@ -60,6 +60,26 @@ app.use((req, res) => {
 });
 
 app.use(errorHandler);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const PORT = env.PORT;
 const startServer = (port) => {
