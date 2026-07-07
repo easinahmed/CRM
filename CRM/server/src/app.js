@@ -33,6 +33,9 @@ if (env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
+// Trust proxy for rate limiting behind reverse proxy (production)
+app.set('trust proxy', 1);
+
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: env.NODE_ENV === 'development' ? 1000 : 300, // More lenient in development
