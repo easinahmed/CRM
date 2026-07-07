@@ -19,8 +19,30 @@ const processQueue = (error, token = null) => {
   failedQueue = [];
 };
 
+// Request interceptor - add token to Authorization header if available
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Store token from login/refresh responses
+    if (response.config.url?.includes('/auth/login') || response.config.url?.includes('/auth/refresh')) {
+      const token = response.data?.data?.tokens?.accessToken;
+      if (token) {
+        localStorage.setItem('accessToken', token);
+        api.defaults.headers.common.Authorization = `Bearer ${token}`;
+      }
+    }
+    return response;
+  },
   async (error) => {
     const originalRequest = error.config;
     const isAuthEndpoint = originalRequest.url?.includes('/auth/');
@@ -43,7 +65,10 @@ api.interceptors.response.use(
         const { data } = await axios.post(`${API_BASE_URL}/api/auth/refresh`, {}, { withCredentials: true });
         const token = data.data?.tokens?.accessToken;
         if (token) {
+          localStorage.setItem('accessToken', token);
+          api.defaults.headers.common.Authorization = `Bearer ${token}`;
           processQueue(null, token);
+          originalRequest.headers.Authorization = `Bearer ${token}`;
           return api(originalRequest);
         } else {
           throw new Error('No token received');
@@ -51,6 +76,7 @@ api.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError, null);
         isRefreshing = false;
+        localStorage.removeItem('accessToken');
         window.location.href = '/login';
         return Promise.reject(refreshError);
       } finally {

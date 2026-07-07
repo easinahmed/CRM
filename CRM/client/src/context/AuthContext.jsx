@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMeApi, loginApi, logoutApi } from '../api/auth';
+import api from '../api/axios';
 import toast from 'react-hot-toast';
 
 const AuthContext = createContext();
@@ -26,6 +27,12 @@ export function AuthProvider({ children }) {
   }, []);
 
   useEffect(() => {
+    // Restore token from localStorage on app load
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      api.defaults.headers.common.Authorization = `Bearer ${token}`;
+    }
+    
     if (!hasCheckedAuth.current) {
       hasCheckedAuth.current = true;
       checkAuth();
@@ -45,6 +52,7 @@ export function AuthProvider({ children }) {
     } catch {
       // continue
     }
+    localStorage.removeItem('accessToken');
     setUser(null);
   };
 
