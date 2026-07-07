@@ -25,7 +25,6 @@ const productSchema = new mongoose.Schema({
   deletedAt: Date,
 }, { timestamps: true });
 
-productSchema.index({ sku: 1 });
 productSchema.index({ category: 1 });
 productSchema.index({ status: 1 });
 productSchema.index({ name: 'text', sku: 'text', description: 'text' });

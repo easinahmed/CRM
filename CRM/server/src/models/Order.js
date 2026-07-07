@@ -43,7 +43,6 @@ const orderSchema = new mongoose.Schema({
   deletedAt: Date,
 }, { timestamps: true });
 
-orderSchema.index({ orderNumber: 1 });
 orderSchema.index({ customer: 1 });
 orderSchema.index({ status: 1 });
 orderSchema.index({ isDeleted: 1 });

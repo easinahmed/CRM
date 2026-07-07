@@ -30,8 +30,6 @@ const employeeSchema = new mongoose.Schema({
   deletedAt: Date,
 }, { timestamps: true });
 
-employeeSchema.index({ employeeId: 1 });
-employeeSchema.index({ email: 1 });
 employeeSchema.index({ department: 1 });
 employeeSchema.index({ status: 1 });
 employeeSchema.index({ isDeleted: 1 });

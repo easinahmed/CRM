@@ -13,7 +13,6 @@ const categorySchema = new mongoose.Schema({
   deletedAt: Date,
 }, { timestamps: true });
 
-categorySchema.index({ slug: 1 });
 categorySchema.index({ parent: 1 });
 
 export default mongoose.model('Category', categorySchema);

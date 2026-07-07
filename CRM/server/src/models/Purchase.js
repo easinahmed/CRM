@@ -35,7 +35,6 @@ const purchaseSchema = new mongoose.Schema({
   deletedAt: Date,
 }, { timestamps: true });
 
-purchaseSchema.index({ purchaseNumber: 1 });
 purchaseSchema.index({ supplier: 1 });
 purchaseSchema.index({ status: 1 });
 purchaseSchema.index({ isDeleted: 1 });

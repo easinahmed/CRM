@@ -33,7 +33,6 @@ const invoiceSchema = new mongoose.Schema({
   deletedAt: Date,
 }, { timestamps: true });
 
-invoiceSchema.index({ invoiceNumber: 1 });
 invoiceSchema.index({ customer: 1 });
 invoiceSchema.index({ status: 1 });
 invoiceSchema.index({ isDeleted: 1 });
