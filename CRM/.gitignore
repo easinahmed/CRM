@@ -1,0 +1,12 @@
+node_modules/
+dist/
+build/
+.env
+*.log
+.DS_Store
+coverage/
+.nyc_output/
+server/uploads/*
+!server/uploads/.gitkeep
+*node_modules/
+*.tgzs
